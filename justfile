@@ -1,5 +1,5 @@
 build:
-    wasm-pack build --target web
+    wasm-pack build --target bundler
 
 run:
-    python3 -m http.server
+    cd site && npm run serve
