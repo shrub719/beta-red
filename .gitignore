@@ -1,2 +1,10 @@
 /target
 .DS_Store
+/pkg
+
+
+# Added by cargo
+#
+# already existing elements were commented out
+
+#/target
