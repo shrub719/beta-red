@@ -7,7 +7,7 @@ use crate::lexer::Token;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Term {
     Abstraction {
-        param: Box<Term>,
+        param: Box<Term>,   // TODO: this should only be Identifier if possible
         body: Box<Term>,
     },
     Application {
