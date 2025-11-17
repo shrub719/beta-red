@@ -7,7 +7,7 @@ use crate::lexer::Token;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Term {
     Abstraction {
-        param: String,
+        param: Box<Term>,
         body: Box<Term>,
     },
     Application {
@@ -18,9 +18,9 @@ pub enum Term {
 }
 
 impl Term {
-    pub fn abs(param: impl Into<String>, body: Term) -> Self {
+    pub fn abs(param: Term, body: Term) -> Self {
         Term::Abstraction {
-            param: param.into(),
+            param: Box::new(param),
             body: Box::new(body),
         }
     }
@@ -39,7 +39,7 @@ impl Term {
 
 pub fn parse(tokens: Vec<Token>) -> Result<Term, ()> {
     Ok(Term::app(
-        Term::abs("x", Term::id("x")),
+        Term::abs(Term::id("x"), Term::id("x")),
         Term::id("a")
     ))
 }
