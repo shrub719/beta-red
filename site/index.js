@@ -1,7 +1,10 @@
-import * as wasm from "lambda";
+import init, { upper } from "../pkg/lambda.js";
 
-const textInput = document.getElementById("text-input");
+init().then(() => {
+    const textInput = document.getElementById("text-input");
 
-textInput.addEventListener("input", (e) => {
-    e.target.value = wasm.upper(e.target.value);
+    textInput.addEventListener("input", (e) => {
+        e.target.value = upper(e.target.value);
+    });
 });
+
