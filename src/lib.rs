@@ -1,7 +1,13 @@
 use wasm_bindgen::prelude::*;
 
+mod lexer;
+mod parser;
+
 #[wasm_bindgen]
-pub fn upper(string: &str) -> String {
-    let string_upper = string.to_ascii_uppercase();
-    string_upper 
+pub fn parse(input: &str) -> Result<JsValue, JsValue> {
+    let tokens = lexer::lex(input).unwrap();
+    let expr = parser::parse(tokens).unwrap();
+
+    Ok(serde_wasm_bindgen::to_value(&expr)?)
 }
+
