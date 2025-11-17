@@ -4,7 +4,7 @@ use serde::{
     Deserialize
 };
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Token {
     Lambda,
     Dot,
