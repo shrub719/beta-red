@@ -1,12 +1,15 @@
 name: Build & deploy site
 
+# TODO: only deploy to main site on tag
 on:
   push:
     branches:
       - main
+      - dev
   pull_request:
     branches:
       - main
+      - dev
   workflow_dispatch:
 
 permissions:
@@ -40,11 +43,23 @@ jobs:
       - name: Build with wasm-pack
         run: wasm-pack build --target web --out-dir pkg
 
+      - name: Set deploy location
+        id: set-dir
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          
+          if [[ "$BRANCH" == "main" ]]; then
+            echo "subdir=." >> $GITHUB_OUTPUT
+          else
+            echo "subdir=test" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup deploy directory
         run: |
-          mkdir ./deploy
-          cp -r ./pkg ./deploy/
-          cp -r ./site ./deploy/
+          mkdir -p "./deploy/${{ steps.set-dir.outputs.subdir }}"
+          cp -r ./pkg "./deploy/${{ steps.set-dir.outputs.subdir }}"
+          cp -r ./site "./deploy/${{ steps.set-dir.outputs.subdir }}"
+          tree ./deploy
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
