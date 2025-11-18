@@ -57,5 +57,12 @@ mod tests {
             Identifier("_3".to_string())
         ]);
     }
+
+    #[test]
+    #[should_panic]
+    fn lex_invalid() {
+        let input = "\\x.x --";
+        lexer::lex(input).unwrap();
+    }
 }
 
