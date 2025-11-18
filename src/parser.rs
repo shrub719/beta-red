@@ -22,6 +22,7 @@ pub enum Term {
 #[wasm_bindgen]
 #[derive(Debug, PartialEq, Serialize)]
 pub enum ParserError {
+    InvalidParameter,
     Error
 }
 
@@ -57,8 +58,33 @@ impl Parser {
         }
     }
 
+    fn consume_if(&mut self, token: Token) -> Result<bool, ParserError> {
+        todo!()
+    }
+
+    fn consume_identifier(&mut self) -> Result<String, ParserError> {
+        todo!()
+    }
+
+    fn consume_expect(&mut self, token: Token) -> Result<Token, ParserError> {
+        todo!()
+    }
+
+    fn application(&mut self) -> Result<Term, ParserError> {
+        todo!()
+    }
+
     fn term(&mut self) -> Result<Term, ParserError> {
-        Ok(Term::id("x"))
+        if self.consume_if(Token::Lambda)? {
+            let name = self.consume_identifier()?;
+            let param = Term::id(name);
+            self.consume_expect(Token::Dot)?;
+            let body = self.term()?;
+
+            return Ok(Term::abs(param, body))
+        } else {
+            return Ok(self.application()?)
+        }
     }
 
     pub fn parse(&mut self) -> Result<Term, ParserError> {
