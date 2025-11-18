@@ -1,10 +1,12 @@
-import init, { upper } from "../pkg/lambda.js";
+import init, { lex } from "../pkg/lambda.js";
 
 init().then(() => {
-    const textInput = document.getElementById("text-input");
+    const input = document.getElementById("input");
+    const output = document.getElementById("output");
 
-    textInput.addEventListener("input", (e) => {
-        e.target.value = upper(e.target.value);
+    input.addEventListener("input", (e) => {
+        let result = lex(e.target.value);
+        output.innerText = JSON.stringify(result, null, 2);
     });
 });
 
