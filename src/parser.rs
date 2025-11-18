@@ -1,3 +1,4 @@
+use wasm_bindgen::prelude::*;
 use serde::{
     Serialize,
     Deserialize
@@ -15,6 +16,12 @@ pub enum Term {
         arg: Box<Term>
     },
     Identifier(String)
+}
+
+#[wasm_bindgen]
+#[derive(Debug, PartialEq, Serialize)]
+pub enum ParserError {
+    Error
 }
 
 impl Term {
@@ -37,9 +44,29 @@ impl Term {
     }
 }
 
-pub fn parse(tokens: Vec<Token>) -> Result<Term, ()> {
-    Ok(Term::app(
-        Term::abs(Term::id("x"), Term::id("x")),
-        Term::id("a")
-    ))
+#[derive(Debug)]
+pub struct Parser {
+    tokens: Vec<Token>
 }
+
+impl Parser {
+    pub fn new(tokens: Vec<Token>) -> Self {
+        Self {
+            tokens
+        }
+    }
+
+    fn term(&mut self) -> Result<Term, ParserError> {
+        Ok(Term::id("x"))
+    }
+
+    pub fn parse(&mut self) -> Result<Term, ParserError> {
+        Ok(self.term()?)
+    }
+}
+
+pub fn parse(tokens: Vec<Token>) -> Result<Term, ParserError> {
+    let mut parser = Parser::new(tokens);   // TODO: must be mutable?
+    parser.parse()
+}
+
