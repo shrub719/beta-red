@@ -1,3 +1,4 @@
+use std::collections::VecDeque;
 use wasm_bindgen::prelude::*;
 use serde::{
     Serialize,
@@ -94,12 +95,12 @@ impl<'input> Iterator for Lexer<'input> {
     }
 }
 
-pub fn lex(input: &str) -> Result<Vec<Token>, LexerError> {
+pub fn lex(input: &str) -> Result<VecDeque<Token>, LexerError> {
     let lexer = Lexer::new(input);
-    let mut tokens: Vec<Token> = Vec::new();
+    let mut tokens: VecDeque<Token> = VecDeque::new();
 
     for token in lexer {
-        tokens.push(token?);
+        tokens.push_back(token?);
     }
 
     Ok(tokens)

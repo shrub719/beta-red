@@ -1,3 +1,4 @@
+use std::collections::VecDeque;
 use wasm_bindgen::prelude::*;
 use serde::{
     Serialize,
@@ -46,11 +47,11 @@ impl Term {
 
 #[derive(Debug)]
 pub struct Parser {
-    tokens: Vec<Token>
+    tokens: VecDeque<Token>
 }
 
 impl Parser {
-    pub fn new(tokens: Vec<Token>) -> Self {
+    pub fn new(tokens: VecDeque<Token>) -> Self {
         Self {
             tokens
         }
@@ -65,7 +66,7 @@ impl Parser {
     }
 }
 
-pub fn parse(tokens: Vec<Token>) -> Result<Term, ParserError> {
+pub fn parse(tokens: VecDeque<Token>) -> Result<Term, ParserError> {
     let mut parser = Parser::new(tokens);   // TODO: must be mutable?
     parser.parse()
 }
