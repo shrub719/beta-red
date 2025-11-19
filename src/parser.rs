@@ -70,10 +70,6 @@ impl Parser {
         todo!()
     }
 
-    fn application(&mut self) -> Result<Term, ParserError> {
-        todo!()
-    }
-
     fn term(&mut self) -> Result<Term, ParserError> {
         if self.consume_if(Token::Lambda)? {
             let name = self.consume_identifier()?;
@@ -85,6 +81,23 @@ impl Parser {
         } else {
             return Ok(self.application()?)
         }
+    }
+
+
+    fn application(&mut self) -> Result<Term, ParserError> {
+        let Some(mut lhs) = self.atom()? else {
+            return Err(ParserError::Error)
+        };
+        loop {
+            let Some(rhs) = self.atom()? else {
+                return Ok(lhs)
+            };
+            lhs = Term::app(lhs, rhs);
+        }
+    }
+
+    fn atom(&mut self) -> Result<Option<Term>, ParserError> {
+        todo!()
     }
 
     pub fn parse(&mut self) -> Result<Term, ParserError> {
