@@ -22,7 +22,9 @@ pub enum Term {
 #[wasm_bindgen]
 #[derive(Debug, PartialEq, Serialize)]
 pub enum ParserError {
-    InvalidParameter,
+    NoToken,
+    UnexpectedToken,
+    NoAtom,
     Error
 }
 
@@ -60,11 +62,11 @@ impl Parser {
 
     fn consume_if(&mut self, token: Token) -> Result<bool, ParserError> {
         let Some(front) = self.tokens.front() else {
-            return Err(ParserError::Error)
+            return Err(ParserError::NoToken)
         };
         if *front == token {
             let Some(_) = self.tokens.pop_front() else {
-                return Err(ParserError::Error)
+                return Err(ParserError::NoToken)
             };
             return Ok(true)
         } else {
@@ -74,25 +76,25 @@ impl Parser {
 
     fn consume_expect(&mut self, token: Token) -> Result<Token, ParserError> {
         let Some(front) = self.tokens.front() else {
-            return Err(ParserError::Error)
+            return Err(ParserError::NoToken)
         };
         if *front == token {
             let Some(front) = self.tokens.pop_front() else {
-                return Err(ParserError::Error)
+                return Err(ParserError::NoToken)
             };
             return Ok(front)
         } else {
-            return Err(ParserError::Error)
+            return Err(ParserError::UnexpectedToken)
         }
     }
 
     fn consume_identifier(&mut self) -> Result<String, ParserError> {
         let Some(front) = self.tokens.front() else {
-            return Err(ParserError::Error)
+            return Err(ParserError::NoToken)
         };
         let name = match front {
             Token::Identifier(name) => name.clone(),
-            _ => return Err(ParserError::Error)
+            _ => return Err(ParserError::UnexpectedToken)
         };
         self.tokens.pop_front();
         Ok(name)
@@ -120,7 +122,7 @@ impl Parser {
 
     fn application(&mut self) -> Result<Term, ParserError> {
         let Some(mut lhs) = self.atom()? else {
-            return Err(ParserError::Error)
+            return Err(ParserError::NoAtom)
         };
         loop {
             let Some(rhs) = self.atom()? else {
