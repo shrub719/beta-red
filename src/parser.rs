@@ -87,11 +87,25 @@ impl Parser {
     }
 
     fn consume_identifier(&mut self) -> Result<String, ParserError> {
-        todo!()
+        let Some(front) = self.tokens.front() else {
+            return Err(ParserError::Error)
+        };
+        let name = match front {
+            Token::Identifier(name) => name.clone(),
+            _ => return Err(ParserError::Error)
+        };
+        self.tokens.pop_front();
+        Ok(name)
     }
 
     fn is_identifier(&mut self) -> Result<bool, ParserError> {
-        todo!()
+        let Some(front) = self.tokens.front() else {
+            return Err(ParserError::Error)
+        };
+        match front {
+            Token::Identifier(_) => Ok(true),
+            _ => Ok(false)
+        }
     }
 
     fn term(&mut self) -> Result<Term, ParserError> {
