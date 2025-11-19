@@ -99,11 +99,8 @@ impl Parser {
     }
 
     fn is_identifier(&mut self) -> Result<bool, ParserError> {
-        let Some(front) = self.tokens.front() else {
-            return Err(ParserError::Error)
-        };
-        match front {
-            Token::Identifier(_) => Ok(true),
+        match self.tokens.front() {
+            Some(Token::Identifier(_)) => Ok(true),
             _ => Ok(false)
         }
     }
