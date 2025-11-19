@@ -4,5 +4,5 @@ build:
 test:
     cargo test -- --no-capture
 
-run: build
+run:
     python3 -m http.server

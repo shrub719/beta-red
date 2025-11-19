@@ -20,7 +20,7 @@ pub enum Term {
 }
 
 #[wasm_bindgen]
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Serialize)]
 pub enum ParserError {
     NoToken,
     UnexpectedToken,
@@ -100,10 +100,10 @@ impl Parser {
         Ok(name)
     }
 
-    fn is_identifier(&mut self) -> Result<bool, ParserError> {
+    fn is_identifier(&mut self) -> bool {
         match self.tokens.front() {
-            Some(Token::Identifier(_)) => Ok(true),
-            _ => Ok(false)
+            Some(Token::Identifier(_)) => true,
+            _ => false
         }
     }
 
@@ -137,7 +137,7 @@ impl Parser {
             let term = self.term()?;
             self.consume_expect(Token::RParen)?;
             return Ok(Some(term))
-        } else if self.is_identifier()? {
+        } else if self.is_identifier() {
             let name = self.consume_identifier()?;
             return Ok(Some(Term::id(name)))
         } else {
