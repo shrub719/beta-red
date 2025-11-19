@@ -9,7 +9,7 @@ use crate::lexer::Token;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Term {
     Abstraction {
-        param: Box<Term>,   // TODO: this should only be Identifier if possible
+        param: String,
         body: Box<Term>,
     },
     Application {
@@ -29,9 +29,9 @@ pub enum ParserError {
 }
 
 impl Term {
-    pub fn abs(param: Term, body: Term) -> Self {
+    pub fn abs(param: impl Into<String>, body: Term) -> Self {
         Term::Abstraction {
-            param: Box::new(param),
+            param: param.into(),
             body: Box::new(body),
         }
     }
@@ -60,17 +60,13 @@ impl Parser {
         }
     }
 
-    fn consume_if(&mut self, token: Token) -> Result<bool, ParserError> {
-        let Some(front) = self.tokens.front() else {
-            return Err(ParserError::NoToken)
-        };
-        if *front == token {
-            let Some(_) = self.tokens.pop_front() else {
-                return Err(ParserError::NoToken)
-            };
-            return Ok(true)
-        } else {
-            return Ok(false)
+    fn consume_if(&mut self, token: Token) -> bool {
+        match self.tokens.front() {
+            Some(front) if *front == token => {
+                self.tokens.pop_front();
+                true
+            },
+            _ => false
         }
     }
 
@@ -108,9 +104,8 @@ impl Parser {
     }
 
     fn term(&mut self) -> Result<Term, ParserError> {
-        if self.consume_if(Token::Lambda)? {
-            let name = self.consume_identifier()?;
-            let param = Term::id(name);
+        if self.consume_if(Token::Lambda) {
+            let param = self.consume_identifier()?;
             self.consume_expect(Token::Dot)?;
             let body = self.term()?;
             return Ok(Term::abs(param, body))
@@ -133,7 +128,7 @@ impl Parser {
     }
 
     fn atom(&mut self) -> Result<Option<Term>, ParserError> {
-        if self.consume_if(Token::LParen)? {
+        if self.consume_if(Token::LParen) {
             let term = self.term()?;
             self.consume_expect(Token::RParen)?;
             return Ok(Some(term))
