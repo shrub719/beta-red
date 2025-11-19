@@ -1,4 +1,4 @@
-import init, { lex, parse } from "../pkg/lambda.js";
+import init, { parse } from "../pkg/lambda.js";
 
 init().then(() => {
     const input = document.getElementById("input");

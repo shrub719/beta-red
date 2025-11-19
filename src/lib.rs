@@ -3,66 +3,14 @@ use wasm_bindgen::prelude::*;
 mod lexer;
 mod parser;
 
+#[cfg(test)]
+mod tests;
+
 #[wasm_bindgen]
 pub fn parse(input: &str) -> Result<JsValue, JsValue> {
     let tokens = lexer::lex(input)?;
     let expr = parser::parse(tokens)?;
 
     Ok(serde_wasm_bindgen::to_value(&expr)?)
-}
-
-#[wasm_bindgen]
-pub fn lex(input: &str) -> Result<JsValue, JsValue> {
-    let tokens = lexer::lex(input)?;
-
-    Ok(serde_wasm_bindgen::to_value(&tokens)?)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn lex_true() {
-        use lexer::Token::*;
-
-        let input = "\\x.\\y.x";
-        let tokens = lexer::lex(input).unwrap();
-
-        assert_eq!(tokens, vec![
-            Lambda, 
-            Identifier("x".to_string()), 
-            Dot, 
-            Lambda, 
-            Identifier("y".to_string()), 
-            Dot, 
-            Identifier("x".to_string())
-        ]);
-    }
-
-    #[test]
-    fn lex_app() {
-        use lexer::Token::*;
-
-        let input = "(\\x.x) _3";
-        let tokens = lexer::lex(input).unwrap();
-
-        assert_eq!(tokens, vec![
-            LParen,
-            Lambda,
-            Identifier("x".to_string()),
-            Dot,
-            Identifier("x".to_string()),
-            RParen,
-            Identifier("_3".to_string())
-        ]);
-    }
-
-    #[test]
-    #[should_panic]
-    fn lex_invalid() {
-        let input = "\\x.x --";
-        lexer::lex(input).unwrap();
-    }
 }
 
