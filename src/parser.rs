@@ -62,11 +62,15 @@ impl Parser {
         todo!()
     }
 
+    fn consume_expect(&mut self, token: Token) -> Result<Token, ParserError> {
+        todo!()
+    }
+
     fn consume_identifier(&mut self) -> Result<String, ParserError> {
         todo!()
     }
 
-    fn consume_expect(&mut self, token: Token) -> Result<Token, ParserError> {
+    fn is_identifier(&mut self) -> Result<bool, ParserError> {
         todo!()
     }
 
@@ -76,7 +80,6 @@ impl Parser {
             let param = Term::id(name);
             self.consume_expect(Token::Dot)?;
             let body = self.term()?;
-
             return Ok(Term::abs(param, body))
         } else {
             return Ok(self.application()?)
@@ -97,7 +100,16 @@ impl Parser {
     }
 
     fn atom(&mut self) -> Result<Option<Term>, ParserError> {
-        todo!()
+        if self.consume_if(Token::LParen)? {
+            let term = self.term()?;
+            self.consume_expect(Token::RParen)?;
+            return Ok(Some(term))
+        } else if self.is_identifier()? {
+            let name = self.consume_identifier()?;
+            return Ok(Some(Term::id(name)))
+        } else {
+            return Ok(None)
+        }
     }
 
     pub fn parse(&mut self) -> Result<Term, ParserError> {
