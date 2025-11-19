@@ -6,7 +6,7 @@ use serde::{
 };
 use crate::lexer::Token;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Term {
     Abstraction {
         param: String,
