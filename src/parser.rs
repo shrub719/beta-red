@@ -59,11 +59,31 @@ impl Parser {
     }
 
     fn consume_if(&mut self, token: Token) -> Result<bool, ParserError> {
-        todo!()
+        let Some(front) = self.tokens.front() else {
+            return Err(ParserError::Error)
+        };
+        if *front == token {
+            let Some(_) = self.tokens.pop_front() else {
+                return Err(ParserError::Error)
+            };
+            return Ok(true)
+        } else {
+            return Ok(false)
+        }
     }
 
     fn consume_expect(&mut self, token: Token) -> Result<Token, ParserError> {
-        todo!()
+        let Some(front) = self.tokens.front() else {
+            return Err(ParserError::Error)
+        };
+        if *front == token {
+            let Some(front) = self.tokens.pop_front() else {
+                return Err(ParserError::Error)
+            };
+            return Ok(front)
+        } else {
+            return Err(ParserError::Error)
+        }
     }
 
     fn consume_identifier(&mut self) -> Result<String, ParserError> {
