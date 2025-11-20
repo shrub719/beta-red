@@ -1,4 +1,4 @@
-import init, { parse } from "../pkg/lambda.js";
+import init, { parse } from "../pkg/beta_red.js";
 
 function handleEdit(e) {
     if (e.target.value === "") {
