@@ -30,7 +30,14 @@ pub enum ParserError {
 
 impl fmt::Display for ParserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "ParserError")    // TODO
+        use ParserError::*;
+
+        write!(f, "{}", match self {
+            NoToken => "unexpected end of input",
+            UnexpectedToken => "unexpected token",
+            NoAtom => "empty",
+            Error => "parser error"
+        })
     }
 }
 

@@ -9,7 +9,7 @@ init().then(() => {
             let result = parse(e.target.value);
             output.innerText = JSON.stringify(result, null, 2);
         } catch (e) {
-            console.error(e);
+            output.innerText = e;
         }
     });
 });

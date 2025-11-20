@@ -22,7 +22,11 @@ pub enum LexerError {
 
 impl fmt::Display for LexerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "LexerError")    // TODO
+        use LexerError::*;
+
+        write!(f, "{}", match self {
+            InvalidCharacter => "invalid character or identifier"
+        })
     }
 }
 
