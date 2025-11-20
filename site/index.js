@@ -5,8 +5,12 @@ init().then(() => {
     const output = document.getElementById("output");
 
     input.addEventListener("input", (e) => {
-        let result = parse(e.target.value);
-        output.innerText = JSON.stringify(result, null, 2);
+        try {
+            let result = parse(e.target.value);
+            output.innerText = JSON.stringify(result, null, 2);
+        } catch (e) {
+            output.innerText = JSON.stringify(result, null, 2);
+        }
     });
 });
 

@@ -19,13 +19,18 @@ pub enum Term {
     Identifier(String)
 }
 
-#[wasm_bindgen]
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub enum ParserError {
     NoToken,
     UnexpectedToken,
     NoAtom,
     Error
+}
+
+impl From<ParserError> for JsValue {
+    fn from(item: ParserError) -> Self {
+        serde_wasm_bindgen::to_value(&item).unwrap()
+    }
 }
 
 impl Term {

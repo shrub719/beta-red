@@ -14,10 +14,15 @@ pub enum Token {
     Identifier(String)
 }
 
-#[wasm_bindgen]
 #[derive(Debug, PartialEq, Serialize)]
 pub enum LexerError {
     InvalidCharacter,   // TODO: add invalid char
+}
+
+impl From<LexerError> for JsValue {
+    fn from(item: LexerError) -> Self {
+        serde_wasm_bindgen::to_value(&item).unwrap()
+    }
 }
 
 #[derive(Debug)]
