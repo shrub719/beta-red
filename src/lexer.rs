@@ -1,4 +1,5 @@
 use std::collections::VecDeque;
+use std::fmt;
 use wasm_bindgen::prelude::*;
 use serde::{
     Serialize,
@@ -19,9 +20,15 @@ pub enum LexerError {
     InvalidCharacter,   // TODO: add invalid char
 }
 
+impl fmt::Display for LexerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "LexerError")    // TODO
+    }
+}
+
 impl From<LexerError> for JsValue {
-    fn from(item: LexerError) -> Self {
-        serde_wasm_bindgen::to_value(&item).unwrap()
+    fn from(error: LexerError) -> Self {
+        js_sys::Error::new(&error.to_string()).into()
     }
 }
 

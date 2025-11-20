@@ -1,4 +1,5 @@
 use std::collections::VecDeque;
+use std::fmt;
 use wasm_bindgen::prelude::*;
 use serde::{
     Serialize,
@@ -27,9 +28,15 @@ pub enum ParserError {
     Error
 }
 
+impl fmt::Display for ParserError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ParserError")    // TODO
+    }
+}
+
 impl From<ParserError> for JsValue {
-    fn from(item: ParserError) -> Self {
-        serde_wasm_bindgen::to_value(&item).unwrap()
+    fn from(error: ParserError) -> Self {
+        js_sys::Error::new(&error.to_string()).into()
     }
 }
 
