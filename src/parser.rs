@@ -23,7 +23,7 @@ pub enum Term {
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub enum ParserError {
     NoToken,
-    UnexpectedToken,
+    UnexpectedToken(Token),
     NoAtom,
     Error
 }
@@ -32,12 +32,12 @@ impl fmt::Display for ParserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use ParserError::*;
 
-        write!(f, "{}", match self {
-            NoToken => "unexpected end of input",
-            UnexpectedToken => "unexpected token",
-            NoAtom => "empty",
-            Error => "parser error"
-        })
+        match self {
+            NoToken => write!(f, "unexpected end of input"),
+            UnexpectedToken(token) => write!(f, "unexpected term '{}'", token),
+            NoAtom => write!(f, "empty function body"),
+            Error => write!(f, "parser error")
+        }
     }
 }
 
@@ -99,7 +99,7 @@ impl Parser {
             };
             return Ok(front)
         } else {
-            return Err(ParserError::UnexpectedToken)
+            return Err(ParserError::UnexpectedToken(front.clone()))
         }
     }
 
@@ -109,7 +109,7 @@ impl Parser {
         };
         let name = match front {
             Token::Identifier(name) => name.clone(),
-            _ => return Err(ParserError::UnexpectedToken)
+            wrong_token => return Err(ParserError::UnexpectedToken(wrong_token.clone()))
         };
         self.tokens.pop_front();
         Ok(name)

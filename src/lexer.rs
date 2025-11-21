@@ -15,18 +15,32 @@ pub enum Token {
     Identifier(String)
 }
 
+impl fmt::Display for Token {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use Token::*;
+
+        write!(f, "{}", match self {
+            Lambda => "λ",
+            Dot => ".",
+            LParen => "(",
+            RParen => ")",
+            Identifier(name) => name
+        })
+    }
+}
+
 #[derive(Debug, PartialEq, Serialize)]
 pub enum LexerError {
-    InvalidCharacter,   // TODO: add invalid char
+    InvalidCharacter(char)
 }
 
 impl fmt::Display for LexerError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         use LexerError::*;
 
-        write!(f, "{}", match self {
-            InvalidCharacter => "invalid character or identifier"
-        })
+        match self {
+            InvalidCharacter(char) => write!(f, "invalid character or identifier '{}'", char)
+        }
     }
 }
 
@@ -65,7 +79,7 @@ impl<'input> Lexer<'input> {
                 let id = self.lex_identifier(c);
                 Token::Identifier(id)
             }
-            _ => return Err(LexerError::InvalidCharacter)
+            wrong_char => return Err(LexerError::InvalidCharacter(wrong_char))
         };
 
         Ok(Some(token))
