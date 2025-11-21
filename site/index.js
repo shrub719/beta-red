@@ -1,4 +1,4 @@
-import init, { parse } from "../pkg/beta_red.js";
+import init, { parse, print } from "../pkg/beta_red.js";
 
 function handleEdit(e) {
     if (e.target.value === "") {
@@ -8,7 +8,9 @@ function handleEdit(e) {
 
     try {
         let result = parse(e.target.value);
-        output.innerText = JSON.stringify(result, null, 2);
+        let expr = JSON.stringify(result, null, 2);
+        let pretty = print(result);
+        output.innerText = pretty + "\n\n" + expr;
     } catch (e) {
         output.innerText = e;
     }

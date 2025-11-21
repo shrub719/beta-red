@@ -20,6 +20,18 @@ pub enum Term {
     Identifier(String)
 }
 
+impl fmt::Display for Term {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use Term::*;
+
+        match self {
+            Abstraction { param, body } => write!(f, "(λ{}. {})", param, body),
+            Application { func, arg } => write!(f, "{} {}", func, arg),
+            Identifier(name) => write!(f, "{}", name)
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub enum ParserError {
     NoToken,
