@@ -5,4 +5,4 @@
     <br />
 </h1>
 
-Online lambda calculus playground. Try it out [here](https://shrub719.github.io/beta-red/site).
+Online lambda calculus playground. Try it out [here](https://shrub719.github.io/beta-red/).
