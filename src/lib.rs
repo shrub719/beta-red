@@ -2,6 +2,7 @@ use wasm_bindgen::prelude::*;
 
 mod lexer;
 mod parser;
+mod evaluator;
 
 #[cfg(test)]
 mod tests;

@@ -1,34 +1,42 @@
+use std::collections::HashMap;
 use crate::parser::Term;
 
-#[derive(Debug)]
-pub struct Evaluator {
-    expr: Term
+fn is_value(term: Term) -> bool {
+    matches!(term, Term::Abstraction { param: _, body: _ })
 }
 
-impl Evaluator {
-    pub fn new(expr: Term) -> Self {
-        Self {
-            expr
-        }
+pub fn eval(expr: Term, context: HashMap<String, Term>) -> Term {
+    // realistically should not throw an error
+    // unless called manually on something that wasn't returned by parse()
+    loop {
+        match expr {
+            Term::Application { func, arg } => {
+                match *func {
+                    Term::Abstraction { param, body } => {
+                        match *arg {
+                            Term::Abstraction { param: _, body: _ } => {
+                                context.insert(param, *arg);
+                                expr = eval(*body, context);
+                            },
+                            eval_term => {
+                                *arg = eval(*arg, context.clone());
+                            }
+                        };
+                    },
+                    eval_term => {
+                        *func = eval(*func, context);
+                    }
+                };
+            },
+            Term::Identifier(name) => {
+                todo!()
+            },
+            _ => return expr
+        };
     }
+}
 
-    fn is_value(term: Term) -> bool {
-        matches!(term, Term::Abstraction)
-    }
-
-    pub fn evaluate(&mut self) -> Term {
-        // realistically should not throw an error
-        // unless called manually on something that wasn't returned by parse()
-        loop {
-            match Term {
-                Term::Application { func, arg } => {
-                    todo!()
-                },
-                Term::Identifier(name) => {
-                    todo!()
-                },
-                _ => return self.expr
-            }
-        }
-    }
+pub fn evaluate(expr: Term) -> Term {
+    let context = HashMap::new();
+    eval(expr, context)
 }
