@@ -1,8 +1,9 @@
 build:
     wasm-pack build --target web
 
-run: build
+serve: build
     python3 -m http.server 
 
 i:
     cargo run
+

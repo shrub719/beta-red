@@ -17,6 +17,16 @@ pub fn parse(input: &str) -> Result<JsValue, errors::ParserError> {
     Ok(js_value)
 }
 
+#[wasm_bindgen]
+pub fn print(input: JsValue) -> Result<String, errors::ParserError> {
+    let expr: parser::Term = match serde_wasm_bindgen::from_value(input) {
+        Ok(res) => res,
+        Err(_) => return Err(errors::ParserError::CannotConvert)
+    };
+
+    Ok(expr.to_string())
+}
+
 #[allow(dead_code)]
 fn main() {
     loop {
