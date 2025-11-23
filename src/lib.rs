@@ -3,6 +3,7 @@ use wasm_bindgen::prelude::*;
 
 mod lexer;
 mod parser;
+mod evaluator;
 mod errors;
 
 #[wasm_bindgen]
