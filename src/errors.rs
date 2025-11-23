@@ -1,8 +1,14 @@
 use std::fmt;
 use wasm_bindgen::prelude::*;
 
+#[derive(Debug)]
 pub enum ParserError {
     InvalidCharacter(usize, char),
+    Empty,
+    UnmatchedLParen(usize),
+    UnmatchedRParen(usize),
+    EmptyFunctionParam(usize),
+    EmptyFunctionBody(usize),
 }
 
 impl fmt::Display for ParserError {
@@ -10,7 +16,12 @@ impl fmt::Display for ParserError {
         use ParserError::*;
 
         match self {
-            InvalidCharacter(pos, ch) => write!(f, "invalid character at position {}: {}", pos, ch)
+            InvalidCharacter(pos, ch) => write!(f, "invalid character at position {}: {}", pos, ch),
+            Empty => write!(f, "empty expression"),
+            UnmatchedRParen(pos) => write!(f, "unmatched closing parenthesis at position {}", pos),
+            UnmatchedLParen(pos) => write!(f, "unmatched opening parenthesis at position {}", pos),
+            EmptyFunctionParam(pos) => write!(f, "empty lambda parameter at position {}", pos),
+            EmptyFunctionBody(pos) => write!(f, "empty lambda body at position {}", pos)
         }
     }
 }

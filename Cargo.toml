@@ -12,3 +12,7 @@ js-sys = "0.3.82"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
+[[bin]]
+name = "beta-blue"
+path = "src/lib.rs"
+
