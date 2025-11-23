@@ -14,6 +14,13 @@ fn disambiguate(w: &str) -> String {
     })
 }
 
+pub fn reset_disambiguation() {
+    DISAMBIGUATE_CTR.with(|c| {
+        let mut ctr = c.borrow_mut();
+        *ctr = 0;
+    })
+}
+
 fn upd_free_vars(expr: &Term, free_vars: &mut HashSet<String>, bound_vars: &mut HashSet<String>) {
     match expr {
         Term::Var(name) => {
@@ -42,8 +49,7 @@ fn get_free_vars(expr: &Term) -> HashSet<String> {
 }
 
 fn alpha_convert(var: &str, body: Term) -> (String, Term) {
-    let new_var = disambiguate(var);
-    let new_body = sub(body, var, &Term::Var(new_var.clone()));
+    let new_var = disambiguate(var); let new_body = sub(body, var, &Term::Var(new_var.clone()));
     (new_var, new_body)
 }
 
@@ -94,4 +100,9 @@ pub fn reduce(expr: Term) -> Term {
         },
         _ => expr
     }
+}
+
+pub fn evaluate(expr: Term) -> Term {
+    reset_disambiguation();
+    reduce(expr)
 }

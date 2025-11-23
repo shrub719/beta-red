@@ -35,7 +35,7 @@ pub fn evaluate(input: JsValue) -> Result<JsValue, errors::ParserError> {
         Err(_) => return Err(errors::ParserError::CannotConvert)
     };
     
-    let reduced = evaluator::reduce(expr);
+    let reduced = evaluator::evaluate(expr);
     
     let js_value = match serde_wasm_bindgen::to_value(&reduced) {
         Ok(val) => val,
