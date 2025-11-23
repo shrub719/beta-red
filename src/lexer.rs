@@ -1,4 +1,5 @@
 use std::str::Chars;
+use crate::errors::ParserError;
 
 pub enum Token {
     Lambda(usize),
@@ -7,7 +8,7 @@ pub enum Token {
     Identifier(usize, String)
 }
 
-pub fn lex(input: &mut Chars) -> Vec<Token> {
+pub fn lex(input: &mut Chars) -> Result<Vec<Token>, ParserError> {
     let mut tokens = Vec::new();
     let mut pos: usize = 0;
     let mut running_id = String::new();
@@ -25,7 +26,7 @@ pub fn lex(input: &mut Chars) -> Vec<Token> {
                 continue;
             },
             c if c.is_whitespace() || c == '.' => (),
-            _ => panic!("invalid character")
+            c => return Err(ParserError::InvalidCharacter(pos, c))
         };
 
         if running_id.len() > 0 {
@@ -39,5 +40,5 @@ pub fn lex(input: &mut Chars) -> Vec<Token> {
         };
     }
 
-    tokens
+    Ok(tokens)
 }
