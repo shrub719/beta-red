@@ -9,6 +9,7 @@ pub enum ParserError {
     UnmatchedRParen(usize),
     EmptyFunctionParam(usize),
     EmptyFunctionBody(usize),
+    CannotConvert
 }
 
 impl fmt::Display for ParserError {
@@ -21,7 +22,8 @@ impl fmt::Display for ParserError {
             UnmatchedRParen(pos) => write!(f, "unmatched closing parenthesis at position {}", pos),
             UnmatchedLParen(pos) => write!(f, "unmatched opening parenthesis at position {}", pos),
             EmptyFunctionParam(pos) => write!(f, "empty lambda parameter at position {}", pos),
-            EmptyFunctionBody(pos) => write!(f, "empty lambda body at position {}", pos)
+            EmptyFunctionBody(pos) => write!(f, "empty lambda body at position {}", pos),
+            CannotConvert => write!(f, "cannot convert expression to JsValue")
         }
     }
 }

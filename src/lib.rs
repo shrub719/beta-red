@@ -6,11 +6,18 @@ mod parser;
 mod errors;
 
 #[wasm_bindgen]
-pub fn parse(input: &str) -> Result<String, errors::ParserError> {
-    lexer::lex(&mut input.chars())?;
-    Ok(input.into())
+pub fn parse(input: &str) -> Result<JsValue, errors::ParserError> {
+    let tokens = lexer::lex(&mut input.chars())?;
+    let expr = parser::parse(&tokens)?;
+
+    let js_value = match serde_wasm_bindgen::to_value(&expr) {
+        Ok(val) => val,
+        Err(_) => return Err(errors::ParserError::CannotConvert)
+    };
+    Ok(js_value)
 }
 
+#[allow(dead_code)]
 fn main() {
     loop {
         let mut buf = String::new();

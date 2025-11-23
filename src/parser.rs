@@ -1,9 +1,14 @@
 use std::fmt;
+use serde::{
+    Serialize,
+    Deserialize
+};
 use crate::{
     errors::ParserError,
     lexer::Token
 };
 
+#[derive(Serialize, Deserialize)]
 pub enum Term {
     App(Box<Term>, Box<Term>),
     Abs(String, Box<Term>),
