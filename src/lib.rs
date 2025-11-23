@@ -34,6 +34,10 @@ fn main() {
         let mut buf = String::new();
         let stdin = io::stdin();
         stdin.read_line(&mut buf).expect("could not read from stdin");
+
+        if buf.starts_with("quit") {
+            break;
+        }
             
         let tokens = match lexer::lex(&mut buf.chars()) {
             Ok(res) => res,
@@ -49,7 +53,8 @@ fn main() {
                 continue;
             }
         };
+        let reduced = evaluator::reduce(expr);
 
-        println!("-> {}", expr);
+        println!("-> {}", reduced);
     }
 }
