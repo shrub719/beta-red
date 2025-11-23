@@ -28,6 +28,22 @@ pub fn print(input: JsValue) -> Result<String, errors::ParserError> {
     Ok(expr.to_string())
 }
 
+#[wasm_bindgen]
+pub fn evaluate(input: JsValue) -> Result<JsValue, errors::ParserError> {
+    let expr: parser::Term = match serde_wasm_bindgen::from_value(input) {
+        Ok(res) => res,
+        Err(_) => return Err(errors::ParserError::CannotConvert)
+    };
+    
+    let reduced = evaluator::reduce(expr);
+    
+    let js_value = match serde_wasm_bindgen::to_value(&reduced) {
+        Ok(val) => val,
+        Err(_) => return Err(errors::ParserError::CannotConvert)
+    };
+    Ok(js_value)
+}
+
 #[allow(dead_code)]
 fn main() {
     loop {
