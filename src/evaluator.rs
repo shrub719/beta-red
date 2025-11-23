@@ -89,15 +89,42 @@ fn sub(root: Term, var: &str, val: &Term) -> Term {
     }
 }
 
+fn church_num_inner(n: usize) -> Term {
+    match n {
+        0 => Term::Var("x".to_string()),
+        _ => Term::App(
+            Box::new(Term::Var("f".to_string())),
+            Box::new(church_num_inner(n-1))
+        )
+    }
+}
+
+fn church_num(n: usize) -> Term {
+    Term::Abs(
+        "f".to_string(),
+        Box::new(Term::Abs(
+            "x".to_string(),
+            Box::new(church_num_inner(n))
+        ))
+    )
+}
+
 pub fn reduce(expr: Term) -> Term {
     match expr {
         Term::App(left, right) => {
-            let left = reduce(*left);
+            let (left, right) = (reduce(*left), reduce(*right));
             match left {
-                Term::Abs(_, _) => reduce(beta_red(left, *right)),
-                _ => Term::App(Box::new(left), Box::new(reduce(*right)))
+                Term::Abs(_, _) => reduce(beta_red(left, right)),
+                _ => Term::App(Box::new(left), Box::new(right))
             }
         },
+        Term::Var(name) => {
+            if name.chars().all(char::is_numeric) {
+                church_num(name.parse().unwrap())
+            } else {
+                Term::Var(name)
+            }
+        }
         _ => expr
     }
 }
