@@ -8,7 +8,7 @@ use crate::{
     lexer::Token
 };
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, PartialEq, Debug, Serialize, Deserialize)]
 pub enum Term {
     App(Box<Term>, Box<Term>),
     Abs(String, Box<Term>),

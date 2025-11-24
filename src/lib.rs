@@ -69,7 +69,7 @@ fn main() {
                 continue;
             }
         };
-        let reduced = evaluator::reduce(expr);
+        let reduced = evaluator::evaluate(expr);
 
         println!("-> {}", reduced);
     }

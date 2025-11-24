@@ -112,10 +112,10 @@ fn church_num(n: usize) -> Term {
 pub fn reduce(expr: Term) -> Term {
     match expr {
         Term::App(left, right) => {
-            let (left, right) = (reduce(*left), reduce(*right));
+            let left = reduce(*left);
             match left {
-                Term::Abs(_, _) => reduce(beta_red(left, right)),
-                _ => Term::App(Box::new(left), Box::new(right))
+                Term::Abs(_, _) => reduce(beta_red(left, *right)),
+                _ => Term::App(Box::new(left), Box::new(reduce(*right)))
             }
         },
         Term::Var(name) => {
@@ -124,12 +124,12 @@ pub fn reduce(expr: Term) -> Term {
             } else {
                 Term::Var(name)
             }
-        }
-        _ => expr
+        },
+        Term::Abs(func, arg) => Term::Abs(func, Box::new(reduce(*arg))),
     }
 }
 
 pub fn evaluate(expr: Term) -> Term {
-    reset_disambiguation();
+    reset_disambiguation();     // TODO: can do this better
     reduce(expr)
 }

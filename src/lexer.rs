@@ -5,6 +5,7 @@ pub enum Token {
     Lambda(usize),
     LParen(usize),
     RParen(usize),
+    #[allow(dead_code)]
     Identifier(usize, String)
 }
 
