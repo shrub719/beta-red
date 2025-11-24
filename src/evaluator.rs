@@ -151,7 +151,5 @@ pub fn reduce(expr: Term) -> Term {
 
 pub fn evaluate(expr: Term) -> Term {
     reset_disambiguation();     // TODO: can do this better
-    let red = reduce(expr);
-    println!("{:?}", red);
-    red
+    reduce(expr)
 }

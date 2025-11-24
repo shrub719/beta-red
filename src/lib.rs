@@ -1,4 +1,5 @@
 use std::io;
+use std::io::Write;
 use wasm_bindgen::prelude::*;
 
 mod lexer;
@@ -47,6 +48,9 @@ pub fn evaluate(input: JsValue) -> Result<JsValue, errors::ParserError> {
 #[allow(dead_code)]
 fn main() {
     loop {
+        print!("> ");
+        io::stdout().flush();
+
         let mut buf = String::new();
         let stdin = io::stdin();
         stdin.read_line(&mut buf).expect("could not read from stdin");
@@ -58,19 +62,19 @@ fn main() {
         let tokens = match lexer::lex(&mut buf.chars()) {
             Ok(res) => res,
             Err(e) => {
-                println!("Error: {}", e);
+                println!("[!] {}\n", e);
                 continue;
             }
         };
         let expr = match parser::parse(&tokens) {
             Ok(res) => res,
             Err(e) => {
-                println!("Error: {}", e);
+                println!("[!] {}\n", e);
                 continue;
             }
         };
         let reduced = evaluator::evaluate(expr);
 
-        println!("-> {}", reduced);
+        println!("{}\n", reduced);
     }
 }
