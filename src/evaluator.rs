@@ -1,7 +1,9 @@
 use std::collections::HashSet;
 use std::cell::RefCell;
 use crate::{
-    parser::Term
+    parser::Term,
+    parser::parse,
+    lexer::lex
 };
 
 thread_local!(static DISAMBIGUATE_CTR: RefCell<u64> = RefCell::new(0));
@@ -109,6 +111,22 @@ fn church_num(n: usize) -> Term {
     )
 }
 
+fn quick_parse(expr: &str) -> Option<Term> {
+    Some(parse(&lex(&mut expr.chars()).unwrap()).unwrap())
+}
+
+fn get_builtin(name: &String) -> Option<Term> {
+    match name.as_str() {
+        "pred" => quick_parse("\\n.\\f.\\x. n (\\g.\\h.h (g f)) (\\u.x) (\\u.u)"),
+        "plus" => quick_parse("\\m.\\n.\\f.\\x.m f (n f x) "),
+        "multiply" => quick_parse("\\m.\\n.\\f.\\x.m (n f) x "),
+        "if" => quick_parse("\\c.\\t.\\f.c t f"),
+        "true" => quick_parse("\\t.\\f.t "),
+        "false" => quick_parse("\\t.\\f.f "),
+        _ => None
+    }
+}
+
 pub fn reduce(expr: Term) -> Term {
     match expr {
         Term::App(left, right) => {
@@ -119,7 +137,9 @@ pub fn reduce(expr: Term) -> Term {
             }
         },
         Term::Var(name) => {
-            if name.chars().all(char::is_numeric) {
+            if let Some(builtin) = get_builtin(&name) {
+                builtin.clone()
+            } else if name.chars().all(char::is_numeric) {
                 church_num(name.parse().unwrap())
             } else {
                 Term::Var(name)
@@ -131,5 +151,7 @@ pub fn reduce(expr: Term) -> Term {
 
 pub fn evaluate(expr: Term) -> Term {
     reset_disambiguation();     // TODO: can do this better
-    reduce(expr)
+    let red = reduce(expr);
+    println!("{:?}", red);
+    red
 }

@@ -51,7 +51,7 @@ fn main() {
         let stdin = io::stdin();
         stdin.read_line(&mut buf).expect("could not read from stdin");
 
-        if buf.starts_with("quit") {
+        if buf.starts_with("quit") || buf.starts_with("exit") {
             break;
         }
             
