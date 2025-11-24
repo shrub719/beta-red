@@ -49,7 +49,7 @@ pub fn evaluate(input: JsValue) -> Result<JsValue, errors::ParserError> {
 fn main() {
     loop {
         print!("> ");
-        io::stdout().flush();
+        io::stdout().flush().unwrap();
 
         let mut buf = String::new();
         let stdin = io::stdin();
