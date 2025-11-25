@@ -156,7 +156,7 @@ pub fn reduce(expr: Term, n: usize) -> Result<Term, ParserError> {
                 Ok(Term::Var(name))
             }
         },
-        Term::Abs(func, arg) => Ok(Term::Abs(func, Box::new(reduce(*arg, n+1)?))),
+        Term::Abs(param, body) => Ok(Term::Abs(param, Box::new(reduce(*body, n+1)?))),
     }
 }
 
