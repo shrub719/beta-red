@@ -8,9 +8,9 @@ function handleEdit(e) {
 
     try {
         let parsed = parse(e.target.value + " "); // why :sob:
-        let reduced = evaluate(result);
+        let reduced = evaluate(parsed);
 
-        let prettyParsed = print(result);
+        let prettyParsed = print(parsed);
         let prettyReduced = print(reduced);
 
         output.innerText = prettyParsed + "\n" + prettyReduced;
