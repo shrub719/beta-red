@@ -1,6 +1,8 @@
 use std::fmt;
 use wasm_bindgen::prelude::*;
 
+pub const MAX_RECURSION: usize = 1000;
+
 #[derive(Debug)]
 pub enum ParserError {
     InvalidCharacter(usize, char),
@@ -9,7 +11,8 @@ pub enum ParserError {
     UnmatchedRParen(usize),
     EmptyFunctionParam(usize),
     EmptyFunctionBody(usize),
-    CannotConvert
+    CannotConvert,
+    MaxRecursion
 }
 
 impl fmt::Display for ParserError {
@@ -23,7 +26,8 @@ impl fmt::Display for ParserError {
             UnmatchedLParen(pos) => write!(f, "unmatched opening parenthesis at position {}", pos),
             EmptyFunctionParam(pos) => write!(f, "empty lambda parameter at position {}", pos),
             EmptyFunctionBody(pos) => write!(f, "empty lambda body at position {}", pos),
-            CannotConvert => write!(f, "cannot convert expression to JsValue")
+            CannotConvert => write!(f, "cannot convert expression to JsValue"),
+            MaxRecursion => write!(f, "max recursion depth reached ({})", MAX_RECURSION)
         }
     }
 }

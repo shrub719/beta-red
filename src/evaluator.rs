@@ -3,7 +3,8 @@ use std::cell::RefCell;
 use crate::{
     parser::Term,
     parser::parse,
-    lexer::lex
+    lexer::lex,
+    errors::{ ParserError, MAX_RECURSION }
 };
 
 thread_local!(static DISAMBIGUATE_CTR: RefCell<u64> = RefCell::new(0));
@@ -127,29 +128,39 @@ fn get_builtin(name: &String) -> Option<Term> {
     }
 }
 
-pub fn reduce(expr: Term) -> Term {
+pub fn reduce(expr: Term, n: usize) -> Result<Term, ParserError> {
+    if n > MAX_RECURSION {
+        return Err(ParserError::MaxRecursion)
+    }
+
     match expr {
         Term::App(left, right) => {
-            let left = reduce(*left);
+            let left = reduce(*left, n+1)?;
             match left {
-                Term::Abs(_, _) => reduce(beta_red(left, *right)),
-                _ => Term::App(Box::new(left), Box::new(reduce(*right)))
+                Term::Abs(_, _) => Ok(reduce(beta_red(left, *right), n+1)?),
+                _ => Ok(Term::App(Box::new(left), Box::new(reduce(*right, n+1)?)))
             }
         },
         Term::Var(name) => {
             if let Some(builtin) = get_builtin(&name) {
-                builtin.clone()
+                Ok(builtin.clone())
             } else if name.chars().all(char::is_numeric) {
-                church_num(name.parse().unwrap())
+                let num = name.parse().unwrap();
+
+                if num > MAX_RECURSION {
+                    return Err(ParserError::MaxRecursion)
+                } else {
+                    Ok(church_num(num))
+                }
             } else {
-                Term::Var(name)
+                Ok(Term::Var(name))
             }
         },
-        Term::Abs(func, arg) => Term::Abs(func, Box::new(reduce(*arg))),
+        Term::Abs(func, arg) => Ok(Term::Abs(func, Box::new(reduce(*arg, n+1)?))),
     }
 }
 
-pub fn evaluate(expr: Term) -> Term {
+pub fn evaluate(expr: Term) -> Result<Term, ParserError> {
     reset_disambiguation();     // TODO: can do this better
-    reduce(expr)
+    Ok(reduce(expr, 0)?)
 }

@@ -36,7 +36,7 @@ pub fn evaluate(input: JsValue) -> Result<JsValue, errors::ParserError> {
         Err(_) => return Err(errors::ParserError::CannotConvert)
     };
     
-    let reduced = evaluator::evaluate(expr);
+    let reduced = evaluator::evaluate(expr)?;
     
     let js_value = match serde_wasm_bindgen::to_value(&reduced) {
         Ok(val) => val,
@@ -59,6 +59,7 @@ fn main() {
             break;
         }
             
+        // TODO: dry -_-
         let tokens = match lexer::lex(&mut buf.chars()) {
             Ok(res) => res,
             Err(e) => {
@@ -73,7 +74,13 @@ fn main() {
                 continue;
             }
         };
-        let reduced = evaluator::evaluate(expr);
+        let reduced = match evaluator::evaluate(expr) {
+            Ok(res) => res,
+            Err(e) => {
+                println!("[!] {}\n", e);
+                continue;
+            }
+        };
 
         println!("{}\n", reduced);
     }

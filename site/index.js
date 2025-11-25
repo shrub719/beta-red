@@ -7,13 +7,13 @@ function handleEdit(e) {
     }
 
     try {
-        let result = parse(e.target.value + " "); // why :sob:
+        let parsed = parse(e.target.value + " "); // why :sob:
         let reduced = evaluate(result);
 
-        let prettyResult = print(result);
+        let prettyParsed = print(result);
         let prettyReduced = print(reduced);
 
-        output.innerText = prettyResult + "\n" + prettyReduced;
+        output.innerText = prettyParsed + "\n" + prettyReduced;
     } catch (e) {
         output.innerText = e;
     }
