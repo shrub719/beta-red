@@ -10,19 +10,29 @@ function handleEdit(e) {
         let parsed = parse(e.target.value + " "); // why :sob:
         let reduced = evaluate(parsed);
 
-        let prettyParsed = print(parsed);
         let prettyReduced = print(reduced);
 
-        output.innerText = prettyParsed + "\n" + prettyReduced;
+        output.innerText = prettyReduced;
     } catch (e) {
         output.innerText = e;
     }
 }
 
-init().then(() => {
-    const input = document.getElementById("input");
-    const output = document.getElementById("output");
+const input = document.getElementById("input");
+const output = document.getElementById("output");
 
+input.addEventListener("input", () => {
+    input.style.width = "1px";
+    let scrollWidth = input.scrollWidth;
+    console.log(scrollWidth);
+    if (scrollWidth > 200) {
+        input.style.width = input.scrollWidth + "px";
+    } else {
+        input.style.width = "200px";
+    }
+});
+
+init().then(() => {
     input.addEventListener("input", handleEdit);
     input.dispatchEvent(new Event("input"));
 });
