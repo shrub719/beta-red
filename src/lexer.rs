@@ -16,22 +16,21 @@ pub fn lex(input: &mut Chars) -> Result<Vec<Token>, ParserError> {
 
     while let Some(ch) = input.next() {
         pos += 1;
-        let mut next_token = None;
 
-        match ch {
-            'λ' | '\\' => next_token = Some(Token::Lambda(pos)),
-            '(' => next_token = Some(Token::LParen(pos)),
-            ')' => next_token = Some(Token::RParen(pos)),
-            l if l == 'L' && running_id.is_empty() => next_token = Some(Token::Lambda(pos)),
+        let next_token = match ch {
+            'λ' | '\\' => Some(Token::Lambda(pos)),
+            '(' => Some(Token::LParen(pos)),
+            ')' => Some(Token::RParen(pos)),
+            l if l == 'L' && running_id.is_empty() => Some(Token::Lambda(pos)),
             c if c.is_alphanumeric() || c == '_' => {
                 running_id.push(c);
                 continue;
             },
-            c if c.is_whitespace() || c == '.' => (),
+            c if c.is_whitespace() || c == '.' => None,
             c => return Err(ParserError::InvalidCharacter(pos, c))
         };
 
-        if running_id.len() > 0 {
+        if !running_id.is_empty() {
             tokens.push(Token::Identifier(
                 pos - running_id.len(),
                 running_id.clone(),
@@ -39,10 +38,9 @@ pub fn lex(input: &mut Chars) -> Result<Vec<Token>, ParserError> {
             running_id.clear();
         }
 
-        match next_token {
-            Some(token) => tokens.push(token),
-            _ => ()
-        };
+        if let Some(token) = next_token {
+            tokens.push(token);
+        }
     }
 
     Ok(tokens)

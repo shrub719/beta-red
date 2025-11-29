@@ -10,6 +10,7 @@ run:
 [confirm]
 publish:
     git switch dev
+    git rebase main
     git push
     git switch main
     git rebase dev
