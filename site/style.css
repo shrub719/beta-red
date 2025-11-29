@@ -1,5 +1,13 @@
+:root {
+    --red: #e97058;
+    --orange: #e4997b;
+    --bg: #202025;
+    --bg-dark: #101015;
+    font-family: monospace;
+}
+
 body {
-    background-color: #202025;
+    background-color: var(--bg);
 }
 
 #logo {
@@ -25,6 +33,41 @@ body {
 #output {
     color: white;
     font-size: 18px;
-    font-family: monospace;
     word-wrap: break-word;
+}
+
+#info {
+    text-align: center;
+}
+
+#info a {
+    color: var(--orange);
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.help {
+    max-width: 800px;
+    color: white;
+    font-size: 18px;
+    word-wrap: break-word;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.help a {
+    color: var(--orange);
+    text-decoration: none;
+}
+
+.help h2 {
+    margin-top: 30px;
+    color: var(--orange);
+}
+
+.help code {
+    background-color: white;
+    color: black;
+    padding: 3px;
+    border-radius: 3px;
 }
