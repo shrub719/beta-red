@@ -1,3 +1,7 @@
+body {
+    background-color: #202025;
+}
+
 #logo {
     display: block;
     width: 100px;
@@ -18,6 +22,7 @@
 }
 
 #output {
+    color: white;
     font-size: 15px;
     font-family: monospace;
     word-wrap: break-word;
