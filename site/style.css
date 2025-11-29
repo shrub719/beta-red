@@ -1,8 +1,7 @@
 #logo {
     display: block;
-    width: 10%;
+    width: 100px;
     margin: 20px auto 20px auto;
-    border: 2px solid red; /* TEMP */
 }
 
 #main {

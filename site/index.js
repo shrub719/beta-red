@@ -26,7 +26,6 @@ input.addEventListener("input", () => {
     const minWidth = 200;
     const textWidth = input.scrollWidth;
     const maxWidth = output.offsetWidth;
-    console.log(maxWidth);
 
     if (textWidth > maxWidth) {
         input.style.width = maxWidth + "px";
