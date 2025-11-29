@@ -7,14 +7,14 @@ function handleEdit(e) {
     }
 
     try {
-        let parsed = parse(e.target.value + " "); // why :sob:
-        let reduced = evaluate(parsed);
+        const parsed = parse(e.target.value + " "); // why :sob:
+        const reduced = evaluate(parsed);
 
-        let prettyReduced = print(reduced);
+        const prettyReduced = print(reduced);
 
         output.innerText = prettyReduced;
     } catch (e) {
-        output.innerText = e;
+        output.innerHTML = "<span style='color: red'>" + e + "</span>";
     }
 }
 
@@ -23,12 +23,17 @@ const output = document.getElementById("output");
 
 input.addEventListener("input", () => {
     input.style.width = "1px";
-    let scrollWidth = input.scrollWidth;
-    console.log(scrollWidth);
-    if (scrollWidth > 200) {
-        input.style.width = input.scrollWidth + "px";
+    const minWidth = 200;
+    const textWidth = input.scrollWidth;
+    const maxWidth = output.offsetWidth;
+    console.log(maxWidth);
+
+    if (textWidth > maxWidth) {
+        input.style.width = maxWidth + "px";
+    } else if (textWidth > minWidth) {
+        input.style.width = textWidth + "px";
     } else {
-        input.style.width = "200px";
+        input.style.width = minWidth + "px";
     }
 });
 

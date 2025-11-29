@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="site/assets/icon-128.png" alt="Beta-Red icon" height="100px"> 
+    <img src="site/assets/icon.png" alt="Beta-Red icon" height="100px"> 
     <br />
     Beta-Red
     <br />
