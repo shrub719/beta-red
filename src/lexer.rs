@@ -32,7 +32,10 @@ pub fn lex(input: &mut Chars) -> Result<Vec<Token>, ParserError> {
         };
 
         if running_id.len() > 0 {
-            tokens.push(Token::Identifier(pos, running_id.clone()));
+            tokens.push(Token::Identifier(
+                pos - running_id.len(),
+                running_id.clone(),
+            ));
             running_id.clear();
         }
 
