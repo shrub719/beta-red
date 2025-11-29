@@ -14,7 +14,7 @@ function handleEdit(e) {
 
         output.innerText = prettyReduced;
     } catch (e) {
-        output.innerHTML = "<span style='color: red'>" + e + "</span>";
+        output.innerHTML = "<span style='color: #e97058'>" + e + "</span>";
     }
 }
 
