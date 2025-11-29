@@ -23,7 +23,7 @@ const output = document.getElementById("output");
 
 input.addEventListener("input", () => {
     input.style.width = "1px";
-    const minWidth = 200;
+    const minWidth = 240;
     const textWidth = input.scrollWidth;
     const maxWidth = output.offsetWidth;
 
