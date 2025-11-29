@@ -22,6 +22,7 @@ pub fn lex(input: &mut Chars) -> Result<Vec<Token>, ParserError> {
             'λ' | '\\' => next_token = Some(Token::Lambda(pos)),
             '(' => next_token = Some(Token::LParen(pos)),
             ')' => next_token = Some(Token::RParen(pos)),
+            l if l == 'L' && running_id.is_empty() => next_token = Some(Token::Lambda(pos)),
             c if c.is_alphanumeric() || c == '_' => {
                 running_id.push(c);
                 continue;
