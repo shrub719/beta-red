@@ -120,13 +120,19 @@ fn get_builtin(name: &String) -> Option<Term> {
     match name.as_str() {
         "pred" => quick_parse("Ln.Lf.Lx. n (Lg.Lh.h (g f)) (Lu.x) (Lu.u) "),
         "succ" => quick_parse("Ln.Lf.Lx.n f (f x)"),
+
         "fact" => quick_parse("Ln.Lf.n(Lf.Ln.n(f(Lf.Lx.n f(f x))))(Lx.f)(Lx.x) "),
         "fib" => quick_parse("Ln.Lf.n(Lc.La.Lb.c b(Lx.a (b x)))(Lx.Ly.x)(Lx.x)f "),
+
         "plus" => quick_parse("Lm.Ln.Lf.Lx.m f (n f x) "),
         "multiply" => quick_parse("Lm.Ln.Lf.Lx.m (n f) x "),
+
         "if" => quick_parse("Lc.Lt.Lf.c t f "),
         "true" => quick_parse("Lt.Lf.t "),
         "false" => quick_parse("Lt.Lf.f "),
+        "not" => quick_parse("Lb.b false true "),
+        "or" => quick_parse("Lp.Lq.p p q "),
+        "and" => quick_parse("Lp.Lq.p q p "),
         _ => None
     }
 }
