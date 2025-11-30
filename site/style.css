@@ -55,12 +55,21 @@ body {
     padding-right: 20px;
 }
 
+.help p {
+    text-align: left;
+}
+
+.help br {
+    line-height: 32px;
+}
+
 .help a {
     color: var(--orange);
     text-decoration: none;
 }
 
 .help h2 {
+    text-align: left;
     margin-top: 30px;
     color: var(--orange);
 }
@@ -70,4 +79,9 @@ body {
     color: black;
     padding: 3px;
     border-radius: 3px;
+}
+
+.help li {
+    text-align: left;
+    margin-top: 16px;
 }
