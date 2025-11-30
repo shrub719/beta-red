@@ -47,6 +47,7 @@ pub fn evaluate(input: JsValue) -> Result<JsValue, errors::ParserError> {
 
 #[allow(dead_code)]
 fn main() {
+    let mut ans = "Lx.x".to_string();
     loop {
         print!("> ");
         io::stdout().flush().unwrap();
@@ -58,6 +59,7 @@ fn main() {
         if buf.starts_with("quit") || buf.starts_with("exit") {
             break;
         }
+        buf = buf.replace("ans", &ans);
             
         // TODO: dry -_-
         let tokens = match lexer::lex(&mut buf.chars()) {
@@ -81,6 +83,7 @@ fn main() {
                 continue;
             }
         };
+        ans = "(".to_owned() + &reduced.to_string() + ")";
 
         println!("{}\n", reduced);
     }
