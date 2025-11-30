@@ -3,7 +3,7 @@
     --orange: #e4997b;
     --bg: #202025;
     --bg-dark: #101015;
-    font-family: monospace;
+    font-family: "Ubuntu Mono", monospace;
 }
 
 body {
@@ -25,7 +25,7 @@ body {
 #input {
     width: 240px;
     font-size: 16px;
-    font-family: monospace;
+    font-family: inherit;
     padding: 3px;
     margin-bottom: 5px;
 }
