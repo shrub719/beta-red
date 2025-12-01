@@ -24,9 +24,9 @@
             </p>
 
             <p>
-                Beta-Red defines a few common shorthand lambda-calc terms as builtins:<br />
+                Beta-Red defines a few common shorthand lambda calculus terms as builtins:<br />
                 <ul>
-                    <li><code>1</code>, <code>2</code>, and other numbers as their Church numerals</li>
+                    <li><code>0</code>, <code>1</code>, <code>2</code>, and other positive integers as their Church numerals</li>
                     <li><code>plus</code> and <code>multiply</code>, each taking in two numbers</li>
                     <li><code>pred</code>, the predecessor function, and <code>succ</code>, the successor function</li>
                     <li><code>fact</code> (factorial) and <code>fib</code> (fibonacci)</li>
@@ -35,9 +35,22 @@
                 </ul>
             </p>
 
-            <h2>What is lambda calculus?</h2>
-            <p>Todo!</p>
-            <p>Check <a href="https://en.wikipedia.org/wiki/Lambda_calculus_definition">Wikipedia</a> for now or something.</p>
+            <h2>What is this?</h2>
+            <p>Beta-Red is a Wasm-based lambda calculus interpreter written in Rust. You can see the source code <a href="https://github.com/shrub719/beta-red/">here</a>!</p>
+
+            <p>
+                Lambda calculus is a simple formal system which you can think of as the tiniest Turing-complete language.<br />
+                The entire language consists of only functions, called <em>abstractions</em>, which look like this:
+            </p>
+
+            <pre>&lambda;x.a</pre>
+
+            <p>WIP</p>
+
+            <pre>(&lambda;x.&lambda;y.x y) t
+&lambda;y.t y</pre>
+
+            <p>WIP</p>
         </div>
         
         <div id="info">

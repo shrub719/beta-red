@@ -11,8 +11,7 @@ body {
 }
 
 #logo {
-    display: block;
-    width: 120px;
+    display: block; width: 120px;
     height: 120px;
     margin: 40px auto 30px auto;
 }
@@ -52,17 +51,13 @@ body {
     max-width: 800px;
     color: white;
     font-size: 18px;
-    word-wrap: break-word;
     padding-left: 20px;
     padding-right: 20px;
+    line-height: 32px;
 }
 
 .help p {
     text-align: left;
-}
-
-.help br {
-    line-height: 32px;
 }
 
 .help a {
@@ -82,6 +77,16 @@ body {
     font-size: 16px;
     padding: 3px;
     border-radius: 3px;
+}
+
+.help pre { 
+    background-color: white;
+    color: black;
+    font-size: 20px;
+    padding: 6px 10px 6px 10px;
+    margin: auto;
+    border-radius: 4px;
+    display: inline-block;
 }
 
 .help li {
